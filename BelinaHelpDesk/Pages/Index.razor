@@ -24,7 +24,7 @@
             await _RoleManager.CreateAsync(new IdentityRole(ADMINISTRATION_ROLE));
         }
     // Try to get the administrator account.
-        var user = await _UserManager.FindByNameAsync("Administrator@email");
+        var user = await _UserManager.FindByNameAsync("Administrator@Email");
     // Administrator may not be created yet.
         if (user != null)
         {
