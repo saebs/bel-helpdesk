@@ -9,9 +9,6 @@ namespace BelinaHelpDesk.Data
     public class BelinaHelpDeskContext : IdentityDbContext
     {
 
-        public DbSet<HelpDeskTicket> HelpDeskTickets { get; set; }
-
-        public DbSet<HelpDeskTicketDetail> HelpDeskTicketDetails { get; set; }
         public BelinaHelpDeskContext(DbContextOptions<BelinaHelpDeskContext> options)
             : base(options)
         {
