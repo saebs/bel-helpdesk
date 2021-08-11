@@ -1,9 +1,12 @@
 @page "/"
 @using System.Security.Claims;
+@using BelinaHelpDesk.Data
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject UserManager<IdentityUser> _UserManager
 @inject RoleManager<IdentityRole> _RoleManager
+@inject OwningComponentBase<BelinaHelpDeskService> _BelinaHelpDeskService 
+
 @if (CurrentUser.IsInRole(ADMINISTRATION_ROLE))
 {
     <p>You are an Administrator named: <b>@CurrentUser.Identity.Name</b></p>
