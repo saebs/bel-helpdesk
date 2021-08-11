@@ -28,28 +28,21 @@ namespace BelinaHelpDesk.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("TicketDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TicketDescription")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("TicketGuid")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
-                        .HasColumnName("TicketGUID");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TicketRequesterEmail")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TicketStatus")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -67,11 +60,10 @@ namespace BelinaHelpDesk.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TicketDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TicketDetailDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -85,7 +77,6 @@ namespace BelinaHelpDesk.Data.Migrations
                     b.HasOne("BelinaHelpDesk.Data.HelpDeskTicket", "HelpDeskTicket")
                         .WithMany("HelpDeskTicketDetails")
                         .HasForeignKey("HelpDeskTicketId")
-                        .HasConstraintName("FK_HelpDeskTicketDetails_HelpDeskTickets")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
