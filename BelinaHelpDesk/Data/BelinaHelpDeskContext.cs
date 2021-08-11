@@ -37,10 +37,10 @@ namespace BelinaHelpDesk.Data
 
                 entity.Property(e => e.TicketDetailDate).HasColumnType("datetime");
 
-                // entity.HasOne(d => d.HelpDeskTicket)
-                    // .WithMany(p => p.HelpDeskTicketDetails)
-                    // .HasForeignKey(d => d.HelpDeskTicketId)
-                    // .HasConstraintName("FK_HelpDeskTicketDetails_HelpDeskTickets");
+                entity.HasOne(d => d.HelpDeskTicket)
+                    .WithMany(p => p.HelpDeskTicketDetails)
+                    .HasForeignKey(d => d.HelpDeskTicketId)
+                    .HasConstraintName("FK_HelpDeskTicketDetails_HelpDeskTickets");
             });
 
             modelBuilder.Entity<HelpDeskTicket>(entity =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -26,6 +27,6 @@ namespace BelinaHelpDesk.Data.Models
         [EmailAddress]
         public string TicketRequesterEmail { get; set; }
         public string TicketGuid { get; set; }
-        public IQueryable HelpDeskTicketDetails { get; }
+        public virtual ICollection<HelpDeskTicketDetail> HelpDeskTicketDetails { get; set; }
     }
 }
