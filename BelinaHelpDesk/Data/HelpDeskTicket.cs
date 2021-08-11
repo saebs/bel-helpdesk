@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace BelinaHelpDesk.Models
+namespace BelinaHelpDesk.Data
 {
     public partial class HelpDeskTicket
     {
