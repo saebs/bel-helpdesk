@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 #nullable disable
 
-namespace BelinaHelpDesk.Data
+namespace BelinaHelpDesk.Data.Models
 {
     public partial class HelpDeskTicket
     {
         public HelpDeskTicket()
         {
-            HelpDeskTicketDetails = new HashSet<HelpDeskTicketDetail>();
         }
 
         public int Id { get; set; }
@@ -26,7 +26,6 @@ namespace BelinaHelpDesk.Data
         [EmailAddress]
         public string TicketRequesterEmail { get; set; }
         public string TicketGuid { get; set; }
-
-        public virtual ICollection<HelpDeskTicketDetail> HelpDeskTicketDetails { get; set; }
+        public IQueryable HelpDeskTicketDetails { get; }
     }
 }

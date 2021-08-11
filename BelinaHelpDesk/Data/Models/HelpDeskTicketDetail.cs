@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BelinaHelpDesk.Data
+namespace BelinaHelpDesk.Data.Models
 {
     public partial class HelpDeskTicketDetail
     {
@@ -11,6 +11,5 @@ namespace BelinaHelpDesk.Data
         public DateTime TicketDetailDate { get; set; }
         public string TicketDescription { get; set; }
 
-        public virtual HelpDeskTicket HelpDeskTicket { get; set; }
     }
 }
