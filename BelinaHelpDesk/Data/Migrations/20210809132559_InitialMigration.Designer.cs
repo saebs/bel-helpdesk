@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BelinaHelpDesk.Data.Migrations
 {
-    [DbContext(typeof(BelinaHelpDeskContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210809132559_InitialMigration")]
     partial class InitialMigration
     {
