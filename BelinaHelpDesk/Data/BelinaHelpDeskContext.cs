@@ -1,11 +1,12 @@
 ﻿using BelinaHelpDesk.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
 namespace BelinaHelpDesk.Data
 {
-    public partial class BelinaHelpDeskContext : DbContext
+    public partial class BelinaHelpDeskContext : IdentityDbContext
     {
         public BelinaHelpDeskContext()
         {
