@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BelinaHelpDesk.Data.Models;
 
 namespace BelinaHelpDesk.Data
 {
@@ -33,7 +34,7 @@ namespace BelinaHelpDesk.Data
         {
             // Get the existing record
             var ExistingTicket = await _context.HelpDeskTickets
-                .Include(x => x.HelpDeskTicketDetails)
+                // .Include(x => x.HelpDeskTicketDetails)
                 .Where(x => x.TicketGuid == HelpDeskTicketGuid)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -89,29 +90,30 @@ namespace BelinaHelpDesk.Data
                         UpdatedHelpDeskTickets.TicketStatus;                    
 
                     // Insert any new TicketDetails
-                    if (UpdatedHelpDeskTickets.HelpDeskTicketDetails != null)
-                    {
-                        foreach (var item in 
-                            UpdatedHelpDeskTickets.HelpDeskTicketDetails)
-                        {
-                            if(item.Id == 0)
-                            {
-                                // Create New HelpDeskTicketDetails record
-                                HelpDeskTicketDetail newHelpDeskTicketDetails = 
-                                    new HelpDeskTicketDetail();
-                                newHelpDeskTicketDetails.HelpDeskTicketId = 
-                                    UpdatedHelpDeskTickets.Id;
-                                newHelpDeskTicketDetails.TicketDetailDate = 
-                                    DateTime.Now;
-                                newHelpDeskTicketDetails.TicketDescription = 
-                                    item.TicketDescription;
+                    // if (UpdatedHelpDeskTickets.HelpDeskTicketDetails != null)
+                    // {
+                    //     foreach (var item in 
+                    //         UpdatedHelpDeskTickets.HelpDeskTicketDetails)
+                    //     {
+                    //         if(item.Id == 0)
+                    //         {
+                    //             // Create New HelpDeskTicketDetails record
+                    //             HelpDeskTicketDetail newHelpDeskTicketDetails = 
+                    //                 new HelpDeskTicketDetail();
+                    //             newHelpDeskTicketDetails.HelpDeskTicketId = 
+                    //                 UpdatedHelpDeskTickets.Id;
+                    //             newHelpDeskTicketDetails.TicketDetailDate = 
+                    //                 DateTime.Now;
+                    //             newHelpDeskTicketDetails.TicketDescription = 
+                    //                 item.TicketDescription;
+                    //
+                    //             _context.HelpDeskTicketDetails
+                    //                 .Add(newHelpDeskTicketDetails);
+                    //         }
+                    //     }
+                    // }
 
-                                _context.HelpDeskTicketDetails
-                                    .Add(newHelpDeskTicketDetails);
-                            }
-                        }
-                    }
-
+         
                     _context.SaveChanges();
                 }
                 else
@@ -135,7 +137,7 @@ namespace BelinaHelpDesk.Data
             // Get the existing record
             var ExistingTicket =
                 _context.HelpDeskTickets
-                .Include(x => x.HelpDeskTicketDetails)
+                // .Include(x => x.HelpDeskTicketDetails)
                 .Where(x => x.Id == DeleteHelpDeskTickets.Id)
                 .FirstOrDefault();
 
