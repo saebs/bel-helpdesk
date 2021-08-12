@@ -5,6 +5,8 @@
 @inject UserManager<IdentityUser> _UserManager
 @inject RoleManager<IdentityRole> _RoleManager
 @using BelinaHelpDesk.Data
+@using BelinaHelpDesk.Data.Models
+@using Microsoft.AspNetCore.Components
 @using Syncfusion.Blazor.Notifications.Internal
 @inherits OwningComponentBase<BelinaHelpDeskService>
 
@@ -14,6 +16,50 @@
          Content="@ToastContent" Timeout="5000">
     <ToastPosition X="Right"></ToastPosition>
 </SfToast>
+
+<h3>New Help Desk Ticket</h3>
+<br />
+<EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
+OnValidSubmit="@HandleValidSubmit">
+<DataAnnotationsValidator></DataAnnotationsValidator>
+<div>
+<SfDropDownList TItem="HelpDeskStatus" TValue="string"
+PopupHeight="230px" Index=0
+Placeholder="Ticket Status"
+DataSource="@HelpDeskStatus.Statuses"
+FloatLabelType="@FloatLabelType.Always"
+@bind-Value="@objHelpDeskTicket.TicketStatus">
+<DropDownListFieldSettings Text="Text"
+Value="ID"></DropDownListFieldSettings>
+</SfDropDownList>
+</div>
+<div>
+<SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
+FloatLabelType="@FloatLabelType.Always"
+@bind-Value="@objHelpDeskTicket.TicketDate"
+Max="DateTime.Now"
+ShowClearButton="false"></SfDatePicker>
+<ValidationMessage For="@(() => objHelpDeskTicket.TicketDate)" />
+</div>
+<div>
+<SfTextBox Placeholder="Ticket Description"
+FloatLabelType="@FloatLabelType.Always"
+@bind-Value="@objHelpDeskTicket.TicketDescription"></SfTextBox>
+<ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
+</div>
+<div>
+<SfTextBox Placeholder="Requester Email"
+FloatLabelType="@FloatLabelType.Always"
+@bind-Value="@objHelpDeskTicket.TicketRequesterEmail"></SfTextBox>
+<ValidationMessage For="@(() => objHelpDeskTicket.TicketRequesterEmail)" />
+</div>
+<br /><br />
+<div class="e-footer-content">
+<div class="button-container">
+<button type="submit" class="e-btn e-normal e-primary">Save</button>
+</div>
+</div>
+</EditForm>
 
 @if (CurrentUser.IsInRole(ADMINISTRATION_ROLE))
 {
@@ -59,6 +105,46 @@
     SfToast ToastObj;
     private string ToastContent { get; set; } = "";
     
+    // Global property for the help desk ticket.
+    HelpDeskTicket objHelpDeskTicket =
+        new HelpDeskTicket() { TicketDate = DateTime.Now };
+    
+    public async Task HandleValidSubmit(EditContext context)
+    {
+        try
+        {
+    // Create a HelpDeskTickets.
+            HelpDeskTicket NewHelpDeskTickets =
+                new HelpDeskTicket();
+    // Set the values to the values entered
+    // in the form.
+            NewHelpDeskTickets.TicketDate =
+                objHelpDeskTicket.TicketDate;
+            NewHelpDeskTickets.TicketDescription =
+                objHelpDeskTicket.TicketDescription;
+            NewHelpDeskTickets.TicketRequesterEmail =
+                objHelpDeskTicket.TicketRequesterEmail;
+            NewHelpDeskTickets.TicketStatus =
+                objHelpDeskTicket.TicketStatus;
+    // Create a new GUID for this help desk ticket.
+            NewHelpDeskTickets.TicketGuid =
+                System.Guid.NewGuid().ToString();
+    // Save the new help desk ticket.
+            var result =
+                @Service.CreateTicketAsync(NewHelpDeskTickets);
+    // Clear the form.
+            objHelpDeskTicket = new HelpDeskTicket();
+    // Show the Toast.
+            ToastContent = "Saved!";
+            await Task.Delay(100);
+            await this.ToastObj.Show();
+        }
+        catch (Exception ex)
+        {
+            ToastContent = ex.GetBaseException().Message;
+            await this.ToastObj.Show();
+        }
+    }
     
 
 }
