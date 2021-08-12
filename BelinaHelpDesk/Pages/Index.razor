@@ -9,6 +9,10 @@
 @using Microsoft.AspNetCore.Components
 @using Syncfusion.Blazor.Notifications.Internal
 @inherits OwningComponentBase<BelinaHelpDeskService>
+@if (CurrentUser.IsInRole(ADMINISTRATION_ROLE))
+{
+    <p>You are an Administrator named: <b>@CurrentUser.Identity.Name</b></p>
+}
 
 <SfToast ID="toast_default"
          @ref="ToastObj"
@@ -61,10 +65,7 @@ FloatLabelType="@FloatLabelType.Always"
 </div>
 </EditForm>
 
-@if (CurrentUser.IsInRole(ADMINISTRATION_ROLE))
-{
-    <p>You are an Administrator named: <b>@CurrentUser.Identity.Name</b></p>
-}
+
 
 @code {
 
