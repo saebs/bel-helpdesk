@@ -1,0 +1,3 @@
+use BelinaHelpDesk;
+ALTER TABLE AspNetRoles ALTER COLUMN Name NVARCHAR(MAX);
+ALTER TABLE AspNetRoles ALTER COLUMN ConcurrencyStamp NVARCHAR(MAX);
