@@ -1,14 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BelinaHelpDesk.Areas.Identity;
 using BelinaHelpDesk.Data;
-using Syncfusion.Blazor;
 
 namespace BelinaHelpDesk
 {
@@ -18,40 +24,30 @@ namespace BelinaHelpDesk
         {
             Configuration = configuration;
         }
-        
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<BelinaHelpDeskContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<BelinaHelpDeskService>();
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<BelinaHelpDeskContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSyncfusionBlazor();
-            services .AddScoped<AuthenticationStateProvider,
-                    RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddScoped<BelinaHelpDeskService>();
             services.AddSingleton<WeatherForecastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //Register Syncfusion license
-            Syncfusion
-                .Licensing
-                .SyncfusionLicenseProvider
-                .RegisterLicense("NDg1MjA5QDMxMzkyZTMyMmUzMFZSZDI3QTdFTWVsdU1aS2pXYVV3cGhaUUFjZ2YvVlNEWEhJSE8rUXNGeGc9;NDg1MjEwQDMxMzkyZTMyMmUzMGkrN2NuSnhzVUF6V2tHZ1F6OTJZU2Q2czMvZHFCUGdTMnpMWXhhcW1nWmM9;NDg1MjExQDMxMzkyZTMyMmUzMEUyQlhuR3lyOEtHeC8xTVIzeEJLeGFhdzJmeG9rRFJKdVQ5U1BCblJzbnc9;NDg1MjEyQDMxMzkyZTMyMmUzMFIrNzlscDYrd2IxRDlZQ1Uray9TN1gwTmNtMXZvMWIzZWJ2MmNieHpsYmM9;NDg1MjEzQDMxMzkyZTMyMmUzMGlnbXNLRDV3SGpvU2FuWU9aeDJWYjBXbHBNRzcwWGZxOXAwemxwVHVHcm89;NDg1MjE0QDMxMzkyZTMyMmUzMGxEVEE5ajNZQ25pa1ZueUQ1RzBRcndORFlxMHBMd3pxSk5Md1B1VXZXTEE9;NDg1MjE1QDMxMzkyZTMyMmUzME03RHBKOU1QeUwybWwxcTd0WVozdVVvZkJWK0R0TXNQa3FQM2FxMytua1k9;NDg1MjE2QDMxMzkyZTMyMmUzMG9ZbjJaemlJNkttWjJPQlFIWisxRXYyR0loZTYySjE5NDhnbHNlb1hZd2c9;NDg1MjE3QDMxMzkyZTMyMmUzMElXRWZuNnJpSVJPMmFXN3BtQkJZK0FjVnNzK1hJd3dDMG44TjBvQUxJdDg9;NDg1MjE4QDMxMzkyZTMyMmUzMGJsaVQ3Z1VTN0haSVJyYlV0ZEoxQUsycWMzbjQ1SUZJa25JN0Z6SWJsV1U9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -66,7 +62,9 @@ namespace BelinaHelpDesk
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
