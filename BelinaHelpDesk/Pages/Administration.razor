@@ -1,0 +1,11 @@
+@page "/administration"
+@using BelinaHelpDesk.Data
+@inherits OwningComponentBase<BelinaHelpDeskService>
+@*AuthorizeView control ensures that *@
+@*Only users in the Administrators role can view this content*@
+<AuthorizeView Roles="Administrators">
+</AuthorizeView>
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+}
