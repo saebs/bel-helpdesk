@@ -79,20 +79,44 @@
     </Content>
     </DialogTemplates>
     </SfDialog>
-    
+   <SfDialog Target="#target"
+                  Width="500px"
+                  Height="500px"
+                  IsModal="true"
+                  ShowCloseIcon="true"
+                  @bind-Visible="EditDialogVisibility">
+           <DialogTemplates>
+               <Header> EDIT TICKET # @SelectedTicket.Id</Header>
+               <Content>
+                   <EditTicket SelectedTicket="@SelectedTicket" />
+               </Content>
+               <FooterTemplate>
+                   <div class="button-container">
+                       <button type="submit"
+                               class="e-btn e-normal e-primary"
+                               @onclick="SaveTicket">
+                           Save
+                       </button>
+                   </div>
+               </FooterTemplate>
+           </DialogTemplates>
+       </SfDialog> 
 </AuthorizeView>
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    SfGrid<HelpDeskTicket> _gridObj;
     
     public IQueryable<HelpDeskTicket> colHelpDeskTickets { get; set; }
     
     public HelpDeskTicket SelectedTicket = new HelpDeskTicket();
+
+    public bool EditDialogVisibility { get; set; }
     
     public bool DeleteRecordConfirmVisibility { get; set; } = false;
-    
-    SfGrid<HelpDeskTicket> _gridObj;
-    
+
+
     protected override void OnInitialized()
     {
     // GetHelpDeskTickets returns IQueryable that the
@@ -101,24 +125,51 @@
         colHelpDeskTickets = @Service.GetHelpDeskTickets();
         
     }
-    
+
     HelpDeskTicket objHelpDeskTicket =
         new HelpDeskTicket() { TicketDate = DateTime.Now };
-    
+
     public async void OnCommandClicked(
         CommandClickEventArgs<HelpDeskTicket> args)
     {
     // Get the selected help desk ticket.
         SelectedTicket =
             await @Service.GetHelpDeskTicketAsync(args.RowData.TicketGuid);
+        if (args.CommandColumn.ButtonOption.Content == "Edit")
+        {
+    // Open teh Edit dialog
+            this.EditDialogVisibility = true;
+            StateHasChanged();
+        }
         if (args.CommandColumn.ButtonOption.Content == "Delete")
         {
     // Open Delete confirmation dialog.
             this.DeleteRecordConfirmVisibility = true;
             StateHasChanged();
         }
-    } 
+    }
 
+    public async Task SaveTicket()
+    {
+    // Update the selected Help Desk Ticket
+        var result =
+            await @Service.UpdateTicketAsync(SelectedTicket);
+
+    // Close the Edit dialog
+        this.EditDialogVisibility = false;
+
+    // Refresh the SfGrid
+    // so the changes to the selected
+    // Help Desk Ticket are reflected
+        _gridObj.Refresh();
+
+    // Send email to Requester
+        // await _EmailSender.SendEmail(
+        //     "Help Desk Ticket Updated",
+        //     SelectedTicket.TicketRequesterEmail,
+        //     SelectedTicket.TicketGuid
+        //     );
+    }
 
     public void ConfirmDeleteNo()
     {
