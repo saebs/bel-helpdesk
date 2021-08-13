@@ -1,11 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BelinaHelpDesk.Data;
 using BelinaHelpDesk.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace BelinaHelpDesk.Data
+namespace BelinaHelpDesk
 {
     public class BelinaHelpDeskService
     {
